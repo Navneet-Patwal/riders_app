@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "438667417814",
+    "project_id": "sellers-a4316",
+    "storage_bucket": "sellers-a4316.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:438667417814:android:b1c23362b8cf50535e1177",
+        "android_client_info": {
+          "package_name": "com.example.riders"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeROQ8GM534hpa0JO4ljL1mgbKAOp7o3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:438667417814:android:677eeb0a9e8822eb5e1177",
+        "android_client_info": {
+          "package_name": "com.tigga.sellersapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeROQ8GM534hpa0JO4ljL1mgbKAOp7o3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:438667417814:android:6aa6d6a15596aee75e1177",
+        "android_client_info": {
+          "package_name": "com.tigga.usersapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeROQ8GM534hpa0JO4ljL1mgbKAOp7o3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
