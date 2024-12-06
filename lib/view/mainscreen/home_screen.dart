@@ -15,7 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          "Home Page"
+          "Riders Home Page"
         ),
       ),
     );
