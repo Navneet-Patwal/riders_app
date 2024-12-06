@@ -30,7 +30,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Sellers App',
       theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: Colors.black
+        scaffoldBackgroundColor: Colors.white
+
       ),
       debugShowCheckedModeBanner: false,
       home: mySplashScreen(),
