@@ -32,4 +32,39 @@ class CommonViewModel{
       "longitude": position?.longitude,
     });
   }
+
+  getRiderPreviousEarnings()  async {
+    await FirebaseFirestore.instance
+        .collection("riders")
+        .doc(sharedPreferences!.getString("uid"))
+        .get().then((snap){
+          previousRiderEarnings = "";
+          previousRiderEarnings = snap.data()!["earnings"].toString();
+    });
+  }
+
+  getSellerPreviousEarnings(String sellersUid) async {
+    await FirebaseFirestore.instance
+        .collection("sellers")
+        .doc(sellersUid)
+        .get().then((snap){
+      previousSellerEarnings = "";
+      previousSellerEarnings = snap.data()!["earnings"].toString();
+    });
+
+  }
+
+  getOrderTotalAmount(String orderId) async {
+    await FirebaseFirestore.instance
+        .collection("orders")
+        .doc(orderId)
+        .get().then((snap){
+      orderTotalAmount = "";
+      orderTotalAmount = snap.data()!["totalAmount"].toString();
+    });
+  }
+
+
+
+
 }

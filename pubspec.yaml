@@ -45,6 +45,8 @@ dependencies:
   firebase_app_check:
   cloud_firestore:
   shared_preferences:
+  intl:
+  url_launcher:
 
 dev_dependencies:
   flutter_test:

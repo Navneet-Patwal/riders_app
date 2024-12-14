@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Sellers App',
+      title: 'Riders App',
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Colors.white
 

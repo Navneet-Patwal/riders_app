@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         title: Text(
           "Welcome ${sharedPreferences!.getString("name")}",
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18,
             color: Colors.white,
             letterSpacing: 2
@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 dashBoardItem("New available orders", Icons.assignment,0),
                 dashBoardItem("Parcel in progress", Icons.airport_shuttle,1),
                 dashBoardItem("Not delivered yet", Icons.location_history,2),
-                dashBoardItem("History", Icons.done_all,3),
+                dashBoardItem("History", Icons.history,3),
                 dashBoardItem("Total earnings", Icons.currency_rupee,4),
                 dashBoardItem("Sign out", Icons.logout,5),
           ],
