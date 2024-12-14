@@ -35,7 +35,6 @@ class _ParcelDeliveringScreenState extends State<ParcelDeliveringScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getUpdatedInfo();
   }
