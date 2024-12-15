@@ -34,7 +34,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
 
     getOrderInfo();

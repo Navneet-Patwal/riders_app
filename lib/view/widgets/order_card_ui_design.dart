@@ -41,13 +41,11 @@ class OrderCardUiDesign extends StatelessWidget {
 Widget placeOrderDesignWidget(Item model, BuildContext context, String quantityNumber){
   return Container(
     width: MediaQuery.of(context).size.width,
-    height:120,
+    height:150,
     child: Row(
       children: [
         Image.network(model.itemImage!, width: 120,),
-
         const SizedBox(width: 10,),
-
         Expanded(
             child:Column(
               crossAxisAlignment: CrossAxisAlignment.start,

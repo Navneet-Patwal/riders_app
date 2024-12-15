@@ -48,7 +48,7 @@ class ShipmentAddressUiDesign extends StatelessWidget {
                     const Text(
                         "Phone Number ", style: TextStyle(color: Colors.white)
                     ),
-                    Text(model!.name!)
+                    Text(model!.phoneNumber!)
                   ]
               ),
             ],

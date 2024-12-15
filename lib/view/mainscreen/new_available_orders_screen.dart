@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import '../../global/global_ins.dart';
 import '../widgets/my_appbar.dart';
 import '../widgets/order_card_ui_design.dart';
@@ -29,8 +28,7 @@ class _NewAvailableOrdersScreenState extends State<NewAvailableOrdersScreen> {
                   future: FirebaseFirestore.instance.collection("items")
                       .where("itemId", whereIn: ordersViewModel.separateItemIdsForOrders(
                       (snapshot.data!.docs[index].data() as Map<String, dynamic>)["productIds"]
-                  ))
-                      .where("orderBy", whereIn: (snapshot.data!.docs[index].data()! as Map<String, dynamic>)["uid"])
+                  )).where("orderBy", whereIn: (snapshot.data!.docs[index].data()! as Map<String, dynamic>)["uid"])
                       .orderBy("publishedDateTime", descending: true)
                       .get(),
                   builder: (c, snap){

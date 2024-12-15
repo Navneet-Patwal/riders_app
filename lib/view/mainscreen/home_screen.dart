@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:riders_app/global/global_var.dart';
 import 'package:riders_app/view/mainscreen/earnings_screen.dart';
 import 'package:riders_app/view/mainscreen/history_screen.dart';
@@ -43,23 +44,23 @@ class _HomeScreenState extends State<HomeScreen> {
           child: InkWell(
             onTap: (){
                 if(index == 0){
-                  Navigator.push(context, MaterialPageRoute(builder: (c)=> NewAvailableOrdersScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (c)=> const NewAvailableOrdersScreen()));
                 }
                 if(index == 1){
-                  Navigator.push(context, MaterialPageRoute(builder: (c)=> ParcelsInProgressScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (c)=>const  ParcelsInProgressScreen()));
                 }
                 if(index == 2){
-                  Navigator.push(context, MaterialPageRoute(builder: (c)=>NotYetDeliveredScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (c)=> const NotYetDeliveredScreen()));
                 }
                 if(index == 3){
-                  Navigator.push(context, MaterialPageRoute(builder: (c)=> HistoryScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (c)=> const HistoryScreen()));
                 }
                 if(index == 4){
-                  Navigator.push(context, MaterialPageRoute(builder: (c)=> EarningsScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (c)=> const EarningsScreen()));
                 }
                if(index == 5){
                  FirebaseAuth.instance.signOut();
-                 Navigator.push(context, MaterialPageRoute(builder: (c)=> mySplashScreen()));
+                 Navigator.push(context, MaterialPageRoute(builder: (c)=>const  mySplashScreen()));
                }
             },
             child: Column(
@@ -106,32 +107,33 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Text(
-          "Welcome ${sharedPreferences!.getString("name")}",
-          style: const TextStyle(
-            fontSize: 18,
-            color: Colors.white,
-            letterSpacing: 2
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          title: Text(
+            "Welcome ${sharedPreferences!.getString("name")}",
+            style: const TextStyle(
+                fontSize: 18,
+                color: Colors.white,
+                letterSpacing: 2
+            ),
           ),
         ),
-      ),
-      body: Container(
-        padding: EdgeInsets.symmetric(vertical: 6, horizontal: 1),
-        child: GridView.count(
-          crossAxisCount: 2,
-          children: [
-                dashBoardItem("New available orders", Icons.assignment,0),
-                dashBoardItem("Parcel in progress", Icons.airport_shuttle,1),
-                dashBoardItem("Not delivered yet", Icons.location_history,2),
-                dashBoardItem("History", Icons.history,3),
-                dashBoardItem("Total earnings", Icons.currency_rupee,4),
-                dashBoardItem("Sign out", Icons.logout,5),
-          ],
+        body: Container(
+          padding: EdgeInsets.symmetric(vertical: 6, horizontal: 1),
+          child: GridView.count(
+            crossAxisCount: 2,
+            children: [
+              dashBoardItem("New available orders", Icons.assignment,0),
+              dashBoardItem("Parcel in progress", Icons.airport_shuttle,1),
+              dashBoardItem("Not delivered yet", Icons.location_history,2),
+              dashBoardItem("History", Icons.history,3),
+              dashBoardItem("Total earnings", Icons.currency_rupee,4),
+              dashBoardItem("Sign out", Icons.logout,5),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+
   }
 }
