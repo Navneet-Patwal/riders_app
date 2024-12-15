@@ -8,6 +8,8 @@ import 'package:riders_app/view/mainscreen/not_yet_delivered_screen.dart';
 import 'package:riders_app/view/mainscreen/parcels_in_progress_screen.dart';
 import 'package:riders_app/view/splashScreen/splash_screen.dart';
 
+import '../../global/global_ins.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -88,6 +90,17 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       );
+  }
+
+  getUpdatedInfo() async{
+    await commonViewModel.getRiderPreviousEarnings();
+  }
+
+  @override
+  void initState() {
+
+    super.initState();
+    getUpdatedInfo();
   }
 
   @override

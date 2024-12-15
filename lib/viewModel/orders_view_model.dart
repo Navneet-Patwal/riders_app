@@ -234,6 +234,34 @@ class OrdersViewModel{
    }
 
 
+  retrieveInProgressOrder(){
+    return FirebaseFirestore.instance
+        .collection("orders")
+    .where("ridersUid",isEqualTo: sharedPreferences!.getString("uid"))
+        .where("status", isEqualTo: "picking")
+        .orderBy("orderTime", descending: true)
+        .snapshots();
+  }
+
+  retrieveToBeDeliveredOrder(){
+    return FirebaseFirestore.instance
+        .collection("orders")
+        .where("ridersUid",isEqualTo: sharedPreferences!.getString("uid"))
+        .where("status", isEqualTo: "delivering")
+        .orderBy("orderTime", descending: true)
+        .snapshots();
+  }
+
+  retrieveOrderHistory(){
+    return FirebaseFirestore.instance
+        .collection("orders")
+        .where("ridersUid",isEqualTo: sharedPreferences!.getString("uid"))
+        .where("status", isEqualTo: "ended")
+        .orderBy("orderTime", descending: true)
+        .snapshots();
+  }
+
+
 
 
 
