@@ -19,16 +19,67 @@ class AuthViewModel{
     else{
       if(password == confirmPassword){
         if(name.isNotEmpty && email.isNotEmpty && password.isNotEmpty && phone.isNotEmpty && locationAddress.isNotEmpty){
-
           commonViewModel.showSnackBar("Please Wait!", context);
+          User? currentFirebaseUser;
+          try{
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password)
+                .then((valueAuth)
+            {
+              currentFirebaseUser = valueAuth.user;
+            });
 
-          User? currentFirebaseUser = await createUserInFirebaseAuth(email,password,context);
           //TODO uploadImageToStorage()
-          String downloadUrl = "jik";
-          await saveUserDataToFireStore(currentFirebaseUser, downloadUrl, name,email,password,locationAddress,phone);
-          Navigator.push(context, MaterialPageRoute(builder: (c)=> HomeScreen()));
+          String downloadUrl = "https://plus.unsplash.com/premium_photo-1661842711348-dc6cdcc37468?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHJpZGVyfGVufDB8fDB8fHww";
+          await saveUserDataToFireStoreForNewUser(currentFirebaseUser, downloadUrl, name,email,password,locationAddress,phone);
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=> const HomeScreen()));
           commonViewModel.showSnackBar("Account created successfully!", context);
-        }
+          return;
+        } on FirebaseAuthException catch(e){
+            if (e.code == 'email-already-in-use') {
+              try{
+                await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((value){
+                  currentFirebaseUser = value.user;
+                });
+              } on FirebaseAuthException catch(e){
+                if(e.code == "wrong-password"){
+                  currentFirebaseUser = null;
+                }
+              }
+                  if(currentFirebaseUser == null) {
+                    commonViewModel.showSnackBar(
+                        "You are already registered with database type password of another app and signup",
+                        context);
+                    return;
+                  }
+              DocumentSnapshot userDoc = await FirebaseFirestore.instance
+                  .collection("riders").doc(currentFirebaseUser!.uid).get();
+              if (userDoc.exists && userDoc["loggedInApp"] == "rider") {
+                commonViewModel.showSnackBar(
+                    "Account already exists!", context);
+                return;
+              }
+              String downloadUrl = "https://plus.unsplash.com/premium_vector-1721131162373-2d0df1719f5e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTg3fHxwZXJzb258ZW58MHx8MHx8fDA%3D";
+              await saveUserDataToFireStoreForOldUser(
+                  currentFirebaseUser,
+                  downloadUrl,
+                  name,
+                  email,
+                  password,
+                  locationAddress,
+                  phone,
+                  context);
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (c) => const HomeScreen()));
+              commonViewModel.showSnackBar(
+                  "Account created successfully!", context);
+              return;
+            } else {
+              commonViewModel.showSnackBar(e.toString(), context);
+              return;
+            }
+          }
+          }
+
         else{
           commonViewModel.showSnackBar("Please fill all fields", context);
           return;
@@ -73,7 +124,7 @@ class AuthViewModel{
   //     return downloadUrl;
   // }
 
-  saveUserDataToFireStore(currentFirebaseUser, downloadUrl, name,email,password,locationAddress,phone) async
+  saveUserDataToFireStoreForNewUser(currentFirebaseUser, downloadUrl, name,email,password,locationAddress,phone) async
   {
     FirebaseFirestore.instance.collection("riders").doc(currentFirebaseUser.uid).set(
       {
@@ -87,6 +138,7 @@ class AuthViewModel{
         "earnings":0.0,
         "latitude":position?.latitude,
         "longitude":position?.longitude,
+        "loggedInApp":"rider"
       }
     );
     sharedPreferences = await SharedPreferences.getInstance();
@@ -97,12 +149,45 @@ class AuthViewModel{
 
   }
 
+
+  saveUserDataToFireStoreForOldUser(currentFirebaseUser, downloadUrl, name,email,password,locationAddress,phone,context) async
+  {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((valueAuth){
+      currentFirebaseUser=valueAuth.user;
+    }).catchError((errorMsg){
+      commonViewModel.showSnackBar(errorMsg, context);
+    });
+    FirebaseFirestore.instance.collection("riders").doc(currentFirebaseUser!.uid).set(
+        {
+          "uid":currentFirebaseUser!.uid,
+          "email": email,
+          "name":name,
+          "image": downloadUrl,
+          "phone":phone,
+          "address":locationAddress,
+          "status":"approved",
+          "earnings":0.0,
+          "latitude":position?.latitude,
+          "longitude":position?.longitude,
+          "loggedInApp":"rider"
+        }
+    );
+    sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences!.setString("uid", currentFirebaseUser!.uid);
+    await sharedPreferences!.setString("name", name);
+    await sharedPreferences!.setString("email", email);
+    await sharedPreferences!.setString("imageUrl", downloadUrl);
+
+  }
+
   validateSignInForm( String email, String password, BuildContext context)  async {
     if (email.isNotEmpty && password.isNotEmpty) {
         commonViewModel.showSnackBar("Validating user....", context);
         User? currentFirebaseUser =  await loginUser(email, password, context);
-       await readDataFromFirestoreAndSetDataLocally(currentFirebaseUser, context);
-       Navigator.push(context, MaterialPageRoute(builder: (c)=> HomeScreen()));
+      if(currentFirebaseUser != null){
+        await readDataFromFirestoreAndSetDataLocally(currentFirebaseUser, context);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (c)=> const HomeScreen()));
+      }
     }else {
       commonViewModel.showSnackBar("All fields are required !", context);
       return;
@@ -111,8 +196,15 @@ class AuthViewModel{
 
   loginUser(email, password, context) async {
     User? currentFirebaseUser;
-    await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((valueAuth){
-      currentFirebaseUser=valueAuth.user;
+    await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((valueAuth) async {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection("riders").doc(valueAuth.user!.uid).get();
+      if(userDoc.exists && userDoc["loggedInApp"] == "rider"){
+        currentFirebaseUser=valueAuth.user;
+      }
+      else{
+        commonViewModel.showSnackBar("No user found!", context);
+        return;
+      }
     }).catchError((errorMsg){
       commonViewModel.showSnackBar(errorMsg, context);
     });
